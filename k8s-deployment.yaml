@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: hello
-          image: northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME
+          image: northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:${TAG_NAME}
           ports:
             - containerPort: 8080
 ---
