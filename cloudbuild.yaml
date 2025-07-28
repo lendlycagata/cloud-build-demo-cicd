@@ -9,7 +9,7 @@ steps:
         "build",
         "-t",
         "northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME",
-        ".",
+        "./hello-world-gke",
       ]
 
   - name: "gcr.io/cloud-builders/docker"
