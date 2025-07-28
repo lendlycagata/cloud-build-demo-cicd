@@ -1,0 +1,31 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: Build Image
+    args:
+      [
+        "build",
+        "-t",
+        "northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    id: Push Image
+    args:
+      [
+        "push",
+        "northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME",
+      ]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: Deploy to GKE
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        sed "s|northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:TAG|northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME|g" k8s-deployment.yaml > final.yaml
+        gcloud container clusters get-credentials hello-world-cluster --region northamerica-northeast1
+        kubectl apply -f final.yaml
+
+images:
+  - "northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME"
