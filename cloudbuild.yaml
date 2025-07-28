@@ -33,15 +33,15 @@ steps:
           exit 1
         fi
 
-        echo "Rendering manifest with tag: $TAG_NAME"
+        echo "Installing envsubst..."
+        apt-get update -qq && apt-get install -y gettext
 
-        apt-get update && apt-get install -y gettext  # provides envsubst
-
+        echo "Rendering manifest with tag $TAG_NAME..."
         envsubst < k8s-deployment.yaml.template > final.yaml
 
         gcloud container clusters get-credentials hello-world-cluster --region northamerica-northeast1
 
-        kubectl apply -f final.yaml --record --wait
+        kubectl apply -f final.yaml --wait
 
 images:
   - "northamerica-northeast1-docker.pkg.dev/off-net-dev/cloud-security/hello-world:$TAG_NAME"
